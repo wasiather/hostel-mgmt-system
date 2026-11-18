@@ -33,3 +33,5 @@ const float NORMAL_RENT  = 4500.0;
  * Developed by: Yasir Ali Junejo (CS26-135) */
 const char *ADMIN_IDS[ADMIN_COUNT]       = { "admin1",     "admin2"     };
 const char *ADMIN_PASSWORDS[ADMIN_COUNT] = { "Hostel@123", "Warden@456" };
+
+//Hi guys i am "Sharjeel the CODER"
