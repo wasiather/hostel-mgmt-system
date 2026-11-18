@@ -1,18 +1,28 @@
 /* ================================================================
                       HOSTEL MANAGEMENT SYSTEM
- * Wasi Ather Siddiqui (CS26-122) : addStudent, findStudent, findRoom
- * Yasir Ali Junejo (CS26-135)    : admin login, main menu, input validation
- * Haris Ismail (CS26-141)        : file handling, union-based contact storage
- * Muhammad Sharjeel (CS26-131)   : fee and room management
+ * Wasi Ather Siddiqui (CS26-122) : addStudent, findStudent, findRoom, searchStudent, displayStudent
+ * Yasir Ali Junejo (CS26-135)    : admin login, main menu, input validation (read funcs), room initialization
+ * Haris Ismail (CS26-141)        : file handling, saveData, report making
+ * Muhammad Sharjeel (CS26-131)   : fee, check out and room management system
  * ================================================================ */
 
-/* ===== PART 1: HEADERS =====
- * Standard libraries for I/O and string handling. */
+/* INDIVIDUAL CONTRIBUTION
+( headers, constants, main( ), prototypes & overall corrections are done mutually while sitting together )
+Student 1 (Wasi Ather Siddiqui, CS26-122): - Developed the student admission module (addStudent) with duplicate ID checking and room allocation,
+implemented the findStudent and findRoom pointer functions, searchStudent and displayStudent, and also prepared the test cases and documentation.
+Student 2 (Yasir Ali Junejo, CS26-135): - Developed the admin login system (two admin accounts with a Try again / Exit option),
+created the main menu structure and the input validation functions (readNumber, readAmount), roomInitialization, prepared the flowcharts, and conducted integration testing.
+Student 3 (Haris Ismail, CS26-141): - Implemented all file handling operations (loadData, saveData, logActivity, exportReport), 
+designed the students.txt record format, and handled the union-based contact storage (phone or email).
+Student 4 (Muhammad Sharjeel, CS26-131): - Developed the fee and room management functions (payFees, showDefaulters, removeStudent, showRoomStatus),
+created the documentation and test cases.
+ */
+
+// headers
 #include <stdio.h>
 #include <string.h>
 
-/* ===== PART 2: CONSTANTS & CONFIGURATION =====
- * Hostel limits, room/contact/type codes and fixed rent rates. */
+// constants & configs
 #define MAX_ROOMS      10
 #define ROOM_CAPACITY  3
 #define MAX_STUDENTS   30
@@ -28,10 +38,41 @@
 const float PREMIUM_RENT = 6000.0;
 const float NORMAL_RENT  = 4500.0;
 
-/* ===== PART 3: ADMIN CREDENTIALS =====
- * Two stored admin accounts used by the login system.
- * Developed by: Yasir Ali Junejo (CS26-135) */
 const char *ADMIN_IDS[ADMIN_COUNT]       = { "admin1",     "admin2"     };
 const char *ADMIN_PASSWORDS[ADMIN_COUNT] = { "Hostel@123", "Warden@456" };
 
-//Hi guys i am "Sharjeel the CODER"
+// prototypes
+
+//main()
+int main(){
+}
+
+//admin login system YASIR
+
+//menu display YASIR
+
+//input validation (readnum, readamount) YASIR
+
+//room initialize YASIR
+
+// LOOKUP FUNCTIONS (findStudent and findRoom) WASI
+
+//admit studennt addStudent Wasi
+
+// display students WASI
+
+// search students WASI
+
+// check out student SHARJEEL
+
+// roomn status SHARJEEL
+
+// fee payment SHARJEEL
+
+// fee defaulters SHARJEEL
+
+// file handling, loadData & saveData HARIS
+
+// activityLog HARIS
+
+// report making HARIS
