@@ -75,7 +75,7 @@ for (i = 0; i < MAX_ROOMS; i++) {
     }
     return NULL;
 
-//admit studennt addStudent Wasi
+//admit student addStudent Wasi
 void addStudent(struct Student students[], int *count, struct Room rooms[])
 {
     struct Student s;
@@ -149,8 +149,57 @@ void printContact(struct Student *s)
 }
 
 // display students WASI
+void displayStudents(struct Student students[], int count, struct Room rooms[])
+{
+  int i;
+  struct Room *r;
 
-// search students WASI
+    if (count == 0) {
+        printf("\n  No students are registered.\n");
+        return; }
+
+    printf("\n  %-5s %-16s %-4s %-5s %-8s %-10s %-10s\n",
+           "ID", "Name", "Age", "Room", "Type", "Due (Rs)", "Paid (Rs)");
+    printf("  -------------------------------------------------------------------\n");
+
+    for (i = 0; i < count; i++) {
+        r = findRoom(rooms, students[i].roomNo);
+        printf("  %-5d %-16s %-4d %-5d %-8s %-10.2f %-10.2f\n",
+               students[i].id, students[i].name, students[i].age,
+               students[i].roomNo, roomTypeName(r->type),
+               students[i].feeDue, students[i].feePaid);
+        printf("        ");
+        printContact(&students[i]);
+        printf("\n");
+    }
+    printf("\n  Total students: %d\n", count);
+}
+
+
+// search students WASi
+void searchStudent(struct Student students[], int count, struct Room rooms[])
+{
+int id = readNumber("\n  Enter student ID to search: ", 1, 9999);
+struct Student *s = findStudent(students, count, id);
+struct Room *r;
+
+    if (s == NULL) {
+        printf("  No student found with ID %d.\n", id);
+        return; }
+
+    r = findRoom(rooms, s->roomNo);
+
+    printf("\n  ID       : %d\n", s->id);
+    printf("  Name     : %s\n", s->name);
+    printf("  Age      : %d\n", s->age);
+    printf("  Room     : %d (%s)\n", s->roomNo, roomTypeName(r->type));
+    printf("  Contact  : ");
+    printContact(s);
+    printf("\n  Fee due  : Rs %.2f\n", s->feeDue);
+    printf("  Fee paid : Rs %.2f\n", s->feePaid);
+    printf("  Status   : %s\n", (s->feePaid >= s->feeDue) ? "Fees cleared" : "Fees pending");
+}
+
 
 // check out student SHARJEEL
 
