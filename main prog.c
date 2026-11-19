@@ -243,9 +243,68 @@ struct Room *r;
 
 
 // check out student SHARJEEL
+void removeStudent(struct Student students[], int *count, struct Room rooms[])
+{
+    int id = readNumber("\n  Enter ID of student to check out: ", 1, 9999);
+    struct Student *s = findStudent(students, *count, id);
+    struct Student *last;
+    struct Room *r;
 
+    if (s == NULL) {
+        printf("  No student found with ID %d.\n", id);
+        return;
+    }
+
+    if (s->feePaid < s->feeDue) {
+        printf("  Warning: Rs %.2f is still unpaid.\n", s->feeDue - s->feePaid);
+        if (readNumber("  Check out anyway? (1 = Yes, 0 = No): ", 0, 1) == 0) {
+            printf("  Check-out cancelled.\n");
+            return;
+        }
+    }
+
+    r = findRoom(rooms, s->roomNo);
+    if (r != NULL && r->occupied > 0) {
+        r->occupied--;
+    }
+
+    logActivity("CHECKED_OUT", s->id);
+
+    last = students + (*count) - 1;
+    while (s < last) {
+        *s = *(s + 1);
+        s++;
+    }
+    (*count)--;
+
+    printf("  Student checked out successfully.\n");
+}
 // roomn status SHARJEEL
+void showRoomStatus(struct Room rooms[])
+{
+    int i;
 
+    printf("\n  %-6s %-9s %-9s %-9s %-10s %s\n",
+           "Room", "Type", "Capacity", "Occupied", "Rent (Rs)", "Status");
+    printf("  -----------------------------------------------------------------\n");
+
+    for (i = 0; i < MAX_ROOMS; i++) {
+        printf("  %-6d %-9s %-9d %-9d %-10.2f ",
+               rooms[i].roomNo, roomTypeName(rooms[i].type),
+               rooms[i].capacity, rooms[i].occupied, rooms[i].rent);
+
+        if (rooms[i].occupied == 0) {
+            printf("Empty\n");
+        } else if (rooms[i].occupied < rooms[i].capacity) {
+            printf("Available (%d bed(s) free)\n", rooms[i].capacity - rooms[i].occupied);
+        } else {
+            printf("Full\n");
+        }
+    }
+
+    printf("\n  Premium rooms: Rs %.2f per month    Normal rooms: Rs %.2f per month\n",
+           PREMIUM_RENT, NORMAL_RENT);
+}
 // fee payment SHARJEEL
 
 // fee defaulters SHARJEEL
