@@ -56,8 +56,97 @@ int main(){
 //room initialize YASIR
 
 // LOOKUP FUNCTIONS (findStudent and findRoom) WASI
+struct Student *findStudent(struct Student *list, int count, int id)
+{ struct Student *p = list;
+    int i;
+for (i = 0; i < count; i++) {
+    if (p->id == id) {
+      return p;    }
+        p++;
+    }
+    return NULL;
+}
+
+struct Room *findRoom(struct Room *list, int roomNo)
+{ int i;
+for (i = 0; i < MAX_ROOMS; i++) {
+        if ((list + i)->roomNo == roomNo) {
+            return list + i; }
+    }
+    return NULL;
 
 //admit studennt addStudent Wasi
+void addStudent(struct Student students[], int *count, struct Room rooms[])
+{
+    struct Student s;
+    struct Room   *room = NULL;
+    int roomNo;
+
+    if (*count >= MAX_STUDENTS) {
+        printf("\n  Hostel is full. No more admissions possible.\n");
+        return;
+    }
+
+    printf("\n  --- Admit New Student ---\n");
+
+    s.id = readNumber("  Student ID (1-9999): ", 1, 9999);
+    if (findStudent(students, *count, s.id) != NULL) {
+        printf("  A student with ID %d already exists.\n", s.id);
+        return; }
+
+    printf("  Name (one word, use _ for space): ");
+    scanf("%s", s.name);
+
+    s.age = readNumber("  Age (16-60): ", 16, 60);
+
+    s.contactType = readNumber("  Contact type (1 = Phone, 2 = Email): ", 1, 2);
+    if (s.contactType == PHONE) {
+        printf("  Phone number: ");
+        scanf("%s", s.contact.phone);
+    } else {
+        printf("  Email address: ");
+        scanf("%s", s.contact.email);
+    }
+
+    showRoomStatus(rooms);
+
+    do {
+        roomNo = readNumber("  Choose room number (0 to cancel): ", 0, FIRST_ROOM_NO + MAX_ROOMS - 1);
+        if (roomNo == 0) {
+            printf("  Admission cancelled.\n");
+            return;
+        }
+        room = findRoom(rooms, roomNo);
+        if (room == NULL) {
+            printf("  No such room.\n");
+        } else if (room->occupied >= room->capacity) {
+            printf("  Room %d is full. Choose another.\n", roomNo);
+            room = NULL;
+        }
+    } while (room == NULL);
+
+    s.roomNo  = room->roomNo;
+    s.feeDue  = room->rent;
+    s.feePaid = 0;
+    room->occupied++;
+
+    students[*count] = s;
+    (*count)++;
+
+    logActivity("ADMITTED", s.id);
+    printf("\n  Student %s admitted to %s room %d. Monthly fee: Rs %.2f\n",
+           s.name, roomTypeName(room->type), s.roomNo, s.feeDue);
+}
+
+/* Helper: prints a student's contact (phone or email). */
+void printContact(struct Student *s)
+{
+    if (s->contactType == PHONE) {
+        printf("Phone: %s", s->contact.phone);
+    } else {
+        printf("Email: %s", s->contact.email);
+    }
+}
 
 // display students WASI
 
