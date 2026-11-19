@@ -48,9 +48,50 @@ int main(){
 }
 
 //admin login system YASIR
-
+int login(void)
+{
+    char id[CRED_LEN + 1];
+    char password[CRED_LEN + 1];
+    int i;
+    printf("\n  ======== ADMIN LOGIN ========\n");
+    while (1) {
+        printf("  Admin ID : ");
+        scanf("%20s", id);
+        printf("  Password : ");
+        scanf("%20s", password);
+        for (i = 0; i < ADMIN_COUNT; i++) 
+        {
+            if (strcmp(id, ADMIN_IDS[i]) == 0 && strcmp(password, ADMIN_PASSWORDS[i]) == 0) 
+            {
+                printf("\n  Login successful. Welcome, %s!\n", id);
+                return 1;
+            }
+        }
+        printf("\n  Access denied: incorrect ID or password.\n");
+        printf("   1. Try again\n");
+        printf("   0. Exit program\n");
+        if (readNumber("  Enter your choice: ", 0, 1) == 0) 
+        {
+            return 0;
+        }
+        printf("\n");
+    }
+}
 //menu display YASIR
-
+void printMenu(void)
+{
+    printf("\n======== HOSTEL MANAGEMENT SYSTEM ========\n");
+    printf("1. Admit a student\n");
+    printf("2. Display all students\n");
+    printf("3. Search student by ID\n");
+    printf("4. Check out (remove) a student\n");
+    printf("5. Show room status\n");
+    printf("6. Pay hostel fees\n");
+    printf("7. Show fee defaulters\n");
+    printf("8. Export report to text file\n");
+    printf("0. Save and exit\n");
+    printf("===========================================\n");
+}
 //input validation (readnum, readamount) YASIR
 
 //room initialize YASIR
