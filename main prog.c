@@ -41,6 +41,31 @@ const float NORMAL_RENT  = 4500.0;
 const char *ADMIN_IDS[ADMIN_COUNT]       = { "admin1",     "admin2"     };
 const char *ADMIN_PASSWORDS[ADMIN_COUNT] = { "Hostel@123", "Warden@456" };
 
+
+union Contact {
+    char phone[16];
+    char email[40];
+};
+
+struct Student {
+    int           id;
+    char          name[NAME_LEN];
+    int           age;
+    int           roomNo;
+    int           contactType;
+    union Contact contact;
+    float         feeDue;
+    float         feePaid;
+};
+
+struct Room {
+    int   roomNo;
+    int   type;
+    int   capacity;
+    int   occupied;
+    float rent;
+};
+
 // prototypes
 int  login(void);
 void printMenu(void);
@@ -67,7 +92,8 @@ void exportReport(struct Student students[], int count, struct Room rooms[]);
 void printContact(struct Student *s);
 
 //main()
-int main(){struct Student students[MAX_STUDENTS];
+int main(){
+    struct Student students[MAX_STUDENTS];
     struct Room    rooms[MAX_ROOMS];
     int studentCount = 0;
     int choice;
@@ -204,6 +230,8 @@ float readAmount(char prompt[], float min, float max)
     return value;
 }
 //room initialize YASIR
+
+/* Helper: returns the room type name (Premium / Normal). */
 char *roomTypeName(int type)
 {
     if (type == PREMIUM) 
@@ -211,6 +239,24 @@ char *roomTypeName(int type)
         return "Premium";
     }
     return "Normal";
+}
+
+void initRooms(struct Room rooms[])
+{
+    int i;
+
+    for (i = 0; i < MAX_ROOMS; i++) {
+        rooms[i].roomNo   = FIRST_ROOM_NO + i;
+        rooms[i].capacity = ROOM_CAPACITY;
+        rooms[i].occupied = 0;
+        if (i < 5) {
+            rooms[i].type = PREMIUM;
+            rooms[i].rent = PREMIUM_RENT;
+        } else {
+            rooms[i].type = NORMAL;
+            rooms[i].rent = NORMAL_RENT;
+        }
+    }
 }
 // LOOKUP FUNCTIONS (findStudent and findRoom) WASI
 struct Student *findStudent(struct Student *list, int count, int id)
@@ -230,7 +276,7 @@ for (i = 0; i < MAX_ROOMS; i++) {
         if ((list + i)->roomNo == roomNo) {
             return list + i; }
     }
-    return NULL;
+    return NULL; }
 
 //admit student addStudent Wasi
 void addStudent(struct Student students[], int *count, struct Room rooms[])
@@ -547,7 +593,7 @@ void saveData(struct Student students[], int count)
 
 
 // activityLog HARIS
-
+void logActivity(char action[], int id)
 {
     FILE *fp = fopen("activity.txt", "a");
 
@@ -563,7 +609,7 @@ void saveData(struct Student students[], int count)
 
 
 // report making HARIS
-
+void exportReport(struct Student students[], int count, struct Room rooms[])
 {
     FILE *fp = fopen("hostel_report.txt", "w");
     int i;
