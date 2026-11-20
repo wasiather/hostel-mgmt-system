@@ -343,9 +343,58 @@ void showRoomStatus(struct Room rooms[])
            PREMIUM_RENT, NORMAL_RENT);
 }
 // fee payment SHARJEEL
+void payFees(struct Student students[], int count)
+{
+    int id = readNumber("\n  Enter student ID: ", 1, 9999);
+    struct Student *s = findStudent(students, count, id);
+    float remaining, amount;
 
+    if (s == NULL) {
+        printf("  No student found with ID %d.\n", id);
+        return;
+    }
+
+    remaining = s->feeDue - s->feePaid;
+    if (remaining <= 0) {
+        printf("  %s has no pending fees.\n", s->name);
+        return;
+    }
+
+    printf("  %s owes Rs %.2f\n", s->name, remaining);
+    amount = readAmount("  Amount to pay: Rs ", 1, remaining);
+
+    s->feePaid = s->feePaid + amount;
+    logActivity("FEE_PAID", s->id);
+
+    if (s->feePaid >= s->feeDue) {
+        printf("  Payment received. Fees fully cleared.\n");
+    } else {
+        printf("  Payment received. Remaining: Rs %.2f\n", s->feeDue - s->feePaid);
+    }
+}
 // fee defaulters SHARJEEL
+void showDefaulters(struct Student students[], int count)
+{
+    int i, found = 0;
+    float pending, totalPending = 0;
 
+    printf("\n  --- Fee Defaulters ---\n");
+    for (i = 0; i < count; i++) {
+        pending = students[i].feeDue - students[i].feePaid;
+        if (pending > 0) {
+            printf("  ID %-5d %-16s Room %-4d Pending: Rs %.2f\n",
+                   students[i].id, students[i].name, students[i].roomNo, pending);
+            totalPending = totalPending + pending;
+            found++;
+        }
+    }
+
+    if (found == 0) {
+        printf("  No defaulters. All fees are cleared.\n");
+    } else {
+        printf("\n  %d defaulter(s), total pending: Rs %.2f\n", found, totalPending);
+    }
+}
 // file handling, loadData & saveData HARIS
 
 // activityLog HARIS
