@@ -93,46 +93,9 @@ void printMenu(void)
     printf("===========================================\n");
 }
 //input validation (readnum, readamount) YASIR
-int readNumber(char prompt[], int min, int max)
-{
-    int value;
 
-    do {
-        printf("%s", prompt);
-        scanf("%d", &value);
-        if (value < min || value > max) 
-        {
-            printf("  Invalid input. Enter a number from %d to %d.\n", min, max);
-        }
-    } while (value < min || value > max);
-
-    return value;
-}
-
-float readAmount(char prompt[], float min, float max)
-{
-    float value;
-
-    do {
-        printf("%s", prompt);
-        scanf("%f", &value);
-        if (value < min || value > max) 
-        {
-            printf("  Invalid amount. Enter a value from %.2f to %.2f.\n", min, max);
-        }
-    } while (value < min || value > max);
-
-    return value;
-}
 //room initialize YASIR
-char *roomTypeName(int type)
-{
-    if (type == PREMIUM) 
-    {
-        return "Premium";
-    }
-    return "Normal";
-}
+
 // LOOKUP FUNCTIONS (findStudent and findRoom) WASI
 struct Student *findStudent(struct Student *list, int count, int id)
 { struct Student *p = list;
