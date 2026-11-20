@@ -42,9 +42,88 @@ const char *ADMIN_IDS[ADMIN_COUNT]       = { "admin1",     "admin2"     };
 const char *ADMIN_PASSWORDS[ADMIN_COUNT] = { "Hostel@123", "Warden@456" };
 
 // prototypes
+int  login(void);
+void printMenu(void);
+int  readNumber(char prompt[], int min, int max);
+float readAmount(char prompt[], float min, float max);
+char *roomTypeName(int type);
+
+void initRooms(struct Room rooms[]);
+void loadData(struct Student students[], int *count, struct Room rooms[]);
+void saveData(struct Student students[], int count);
+void logActivity(char action[], int id);
+
+struct Student *findStudent(struct Student *list, int count, int id);
+struct Room    *findRoom(struct Room *list, int roomNo);
+
+void addStudent(struct Student students[], int *count, struct Room rooms[]);
+void displayStudents(struct Student students[], int count, struct Room rooms[]);
+void searchStudent(struct Student students[], int count, struct Room rooms[]);
+void removeStudent(struct Student students[], int *count, struct Room rooms[]);
+void showRoomStatus(struct Room rooms[]);
+void payFees(struct Student students[], int count);
+void showDefaulters(struct Student students[], int count);
+void exportReport(struct Student students[], int count, struct Room rooms[]);
+void printContact(struct Student *s);
 
 //main()
-int main(){
+int main(){struct Student students[MAX_STUDENTS];
+    struct Room    rooms[MAX_ROOMS];
+    int studentCount = 0;
+    int choice;
+
+    if (!login()) {
+        printf("\n  Exiting program. Goodbye!\n\n");
+        return 0;
+    }
+
+    loadData(students, &studentCount, rooms);
+
+    printf("\n  Welcome to the Hostel Management System\n");
+    printf("  Records loaded: %d student(s)\n", studentCount);
+
+    do {
+        printMenu();
+        choice = readNumber("  Enter your choice: ", 0, 8);
+
+        switch (choice) {
+            case 1:
+                addStudent(students, &studentCount, rooms);
+                saveData(students, studentCount);
+                break;
+            case 2:
+                displayStudents(students, studentCount, rooms);
+                break;
+            case 3:
+                searchStudent(students, studentCount, rooms);
+                break;
+            case 4:
+                removeStudent(students, &studentCount, rooms);
+                saveData(students, studentCount);
+                break;
+            case 5:
+                showRoomStatus(rooms);
+                break;
+            case 6:
+                payFees(students, studentCount);
+                saveData(students, studentCount);
+                break;
+            case 7:
+                showDefaulters(students, studentCount);
+                break;
+            case 8:
+                exportReport(students, studentCount, rooms);
+                break;
+            case 0:
+                saveData(students, studentCount);
+                printf("\n  Data saved. Goodbye!\n\n");
+                break;
+            default:
+                printf("  Invalid choice.\n");
+        }
+    } while (choice != 0);
+
+    return 0;
 }
 
 //admin login system YASIR
