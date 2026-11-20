@@ -396,7 +396,132 @@ void showDefaulters(struct Student students[], int count)
     }
 }
 // file handling, loadData & saveData HARIS
+void loadData(struct Student students[], int *count, struct Room rooms[])
+{
+    FILE *fp;
+    int i;
+    struct Room *r;
+
+    initRooms(rooms);
+    *count = 0;
+
+    fp = fopen("students.txt", "r");
+    if (fp == NULL) {
+        printf("  (No saved data found. Starting with an empty hostel.)\n");
+        return;
+    }
+
+    fscanf(fp, "%d", count);
+    if (*count > MAX_STUDENTS) {
+        *count = MAX_STUDENTS;
+    }
+
+    for (i = 0; i < *count; i++) {
+        fscanf(fp, "%d %s %d %d %d",
+               &students[i].id, students[i].name, &students[i].age,
+               &students[i].roomNo, &students[i].contactType);
+
+        if (students[i].contactType == PHONE) {
+            fscanf(fp, "%s", students[i].contact.phone);
+        } else {
+            fscanf(fp, "%s", students[i].contact.email);
+        }
+
+        fscanf(fp, "%f %f", &students[i].feeDue, &students[i].feePaid);
+
+        r = findRoom(rooms, students[i].roomNo);
+        if (r != NULL) {
+            r->occupied++;
+        }
+    }
+
+    fclose(fp);
+}
+
+void saveData(struct Student students[], int count)
+{
+    FILE *fp = fopen("students.txt", "w");
+    int i;
+
+    if (fp == NULL) {
+        perror("  Error saving students.txt");
+        return;
+    }
+
+    fprintf(fp, "%d\n", count);
+    for (i = 0; i < count; i++) {
+        fprintf(fp, "%d %s %d %d %d ",
+                students[i].id, students[i].name, students[i].age,
+                students[i].roomNo, students[i].contactType);
+
+        if (students[i].contactType == PHONE) {
+            fprintf(fp, "%s ", students[i].contact.phone);
+        } else {
+            fprintf(fp, "%s ", students[i].contact.email);
+        }
+
+        fprintf(fp, "%.2f %.2f\n", students[i].feeDue, students[i].feePaid);
+    }
+
+    fclose(fp);
+}
+
 
 // activityLog HARIS
 
+{
+    FILE *fp = fopen("activity.txt", "a");
+
+    if (fp == NULL) {
+        perror("  Error opening activity.txt");
+        return;
+    }
+
+    fprintf(fp, "%s student ID %d\n", action, id);
+    fclose(fp);
+}
+
+
+
 // report making HARIS
+
+{
+    FILE *fp = fopen("hostel_report.txt", "w");
+    int i;
+    int bedsUsed = 0;
+    float totalDue = 0, totalPaid = 0;
+    struct Room *r;
+
+    if (fp == NULL) {
+        perror("  Error creating hostel_report.txt");
+        return;
+    }
+
+    fputs("========== HOSTEL REPORT ==========\n\n", fp);
+    fprintf(fp, "%-5s %-16s %-5s %-8s %-10s %-10s\n",
+            "ID", "Name", "Room", "Type", "Due", "Paid");
+    fputs("-----------------------------------------------------------\n", fp);
+
+    for (i = 0; i < count; i++) {
+        r = findRoom(rooms, students[i].roomNo);
+        fprintf(fp, "%-5d %-16s %-5d %-8s %-10.2f %-10.2f\n",
+                students[i].id, students[i].name, students[i].roomNo,
+                roomTypeName(r->type), students[i].feeDue, students[i].feePaid);
+        totalDue  = totalDue + students[i].feeDue;
+        totalPaid = totalPaid + students[i].feePaid;
+    }
+
+    for (i = 0; i < MAX_ROOMS; i++) {
+        bedsUsed = bedsUsed + rooms[i].occupied;
+    }
+
+    fprintf(fp, "\nTotal students   : %d\n", count);
+    fprintf(fp, "Beds occupied    : %d of %d\n", bedsUsed, MAX_STUDENTS);
+    fprintf(fp, "Total fees due   : Rs %.2f\n", totalDue);
+    fprintf(fp, "Total fees paid  : Rs %.2f\n", totalPaid);
+    fprintf(fp, "Total pending    : Rs %.2f\n", totalDue - totalPaid);
+
+    fclose(fp);
+    printf("\n  Report saved to hostel_report.txt\n");
+}
+
