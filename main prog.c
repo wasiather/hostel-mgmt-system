@@ -142,7 +142,6 @@ int main(){
 }
 
 /* ADMIN LOGIN SYSTEM
- Checks ID and password against two admin accounts; Try again / Exit option.
  Developed by: Yasir Ali Junejo*/
 int login(void)
 {
