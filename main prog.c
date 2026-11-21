@@ -1,28 +1,17 @@
-/* ================================================================
-                      HOSTEL MANAGEMENT SYSTEM
+/*         ================================================================
+                             HOSTEL MANAGEMENT SYSTEM
  * Wasi Ather Siddiqui (CS26-122) : addStudent, findStudent, findRoom, searchStudent, displayStudent
- * Yasir Ali Junejo (CS26-135)    : admin login, main menu, input validation (read funcs), room initialization
+ * Yasir Ali Junejo (CS26-135)    : admin login, main menu, input validation (read functions), room initialization
  * Haris Ismail (CS26-141)        : file handling, saveData, report making
- * Muhammad Sharjeel (CS26-131)   : fee, check out and room management system
- * ================================================================ */
+ * Muhammad Sharjeel (CS26-131)   : fee, check out and rooms management functions
+           ================================================================     */                                               
 
-/* INDIVIDUAL CONTRIBUTION
-( headers, constants, main( ), prototypes & overall corrections are done mutually while sitting together )
-Student 1 (Wasi Ather Siddiqui, CS26-122): - Developed the student admission module (addStudent) with duplicate ID checking and room allocation,
-implemented the findStudent and findRoom pointer functions, searchStudent and displayStudent, and also prepared the test cases and documentation.
-Student 2 (Yasir Ali Junejo, CS26-135): - Developed the admin login system (two admin accounts with a Try again / Exit option),
-created the main menu structure and the input validation functions (readNumber, readAmount), roomInitialization, prepared the flowcharts, and conducted integration testing.
-Student 3 (Haris Ismail, CS26-141): - Implemented all file handling operations (loadData, saveData, logActivity, exportReport), 
-designed the students.txt record format, and handled the union-based contact storage (phone or email).
-Student 4 (Muhammad Sharjeel, CS26-131): - Developed the fee and room management functions (payFees, showDefaulters, removeStudent, showRoomStatus),
-created the documentation and test cases.
- */
-
-// headers
+                    
+// Headers
 #include <stdio.h>
 #include <string.h>
 
-// constants & configs
+// Constants, Storage & Configurations
 #define MAX_ROOMS      10
 #define ROOM_CAPACITY  3
 #define MAX_STUDENTS   30
@@ -66,7 +55,7 @@ struct Room {
     float rent;
 };
 
-// prototypes
+// Prototypes
 int  login(void);
 void printMenu(void);
 int  readNumber(char prompt[], int min, int max);
@@ -91,7 +80,7 @@ void showDefaulters(struct Student students[], int count);
 void exportReport(struct Student students[], int count, struct Room rooms[]);
 void printContact(struct Student *s);
 
-//main()
+//Main Function
 int main(){
     struct Student students[MAX_STUDENTS];
     struct Room    rooms[MAX_ROOMS];
@@ -152,7 +141,9 @@ int main(){
     return 0;
 }
 
-//admin login system YASIR
+/* ADMIN LOGIN SYSTEM
+ Checks ID and password against two admin accounts; Try again / Exit option.
+ Developed by: Yasir Ali Junejo*/
 int login(void)
 {
     char id[CRED_LEN + 1];
@@ -182,7 +173,8 @@ int login(void)
         printf("\n");
     }
 }
-//menu display YASIR
+/* MENU DISPLAY
+ Developed by: Yasir Ali Junejo */
 void printMenu(void)
 {
     printf("\n======== HOSTEL MANAGEMENT SYSTEM ========\n");
@@ -197,7 +189,8 @@ void printMenu(void)
     printf("0. Save and exit\n");
     printf("===========================================\n");
 }
-//input validation (readnum, readamount) YASIR
+/* INPUT VALIDATION 
+ Developed by: Yasir Ali Junejo */
 int readNumber(char prompt[], int min, int max)
 {
     int value;
@@ -229,9 +222,9 @@ float readAmount(char prompt[], float min, float max)
 
     return value;
 }
-//room initialize YASIR
-
-/* Helper: returns the room type name (Premium / Normal). */
+/* ROOM INITIALIZATION
+Developed by: Yasir Ali Junejo */
+void initRooms(struct Room rooms[])
 char *roomTypeName(int type)
 {
     if (type == PREMIUM) 
@@ -258,7 +251,8 @@ void initRooms(struct Room rooms[])
         }
     }
 }
-// LOOKUP FUNCTIONS (findStudent and findRoom) WASI
+/* LOOKUP FUNCTIONS
+Developed by: Wasi Ather Siddiqui */
 struct Student *findStudent(struct Student *list, int count, int id)
 { struct Student *p = list;
     int i;
@@ -278,7 +272,8 @@ for (i = 0; i < MAX_ROOMS; i++) {
     }
     return NULL; }
 
-//admit student addStudent Wasi
+/* ADMIT STUDENTS
+Developed by: Wasi Ather Siddiqui */
 void addStudent(struct Student students[], int *count, struct Room rooms[])
 {
     struct Student s;
@@ -351,7 +346,8 @@ void printContact(struct Student *s)
     }
 }
 
-// display students WASI
+/* DISPLAY STUDENTS
+Developed by: Wasi Ather Siddiqui */
 void displayStudents(struct Student students[], int count, struct Room rooms[])
 {
   int i;
@@ -379,7 +375,8 @@ void displayStudents(struct Student students[], int count, struct Room rooms[])
 }
 
 
-// search students WASi
+/* SEARCH STUDENT
+Developed by: Wasi Ather Siddiqui */
 void searchStudent(struct Student students[], int count, struct Room rooms[])
 {
 int id = readNumber("\n  Enter student ID to search: ", 1, 9999);
@@ -404,7 +401,8 @@ struct Room *r;
 }
 
 
-// check out student SHARJEEL
+/* CHECK OUT STUDENTS
+Developed by: Muhammad Sharjeel */
 void removeStudent(struct Student students[], int *count, struct Room rooms[])
 {
     int id = readNumber("\n  Enter ID of student to check out: ", 1, 9999);
@@ -441,7 +439,8 @@ void removeStudent(struct Student students[], int *count, struct Room rooms[])
 
     printf("  Student checked out successfully.\n");
 }
-// roomn status SHARJEEL
+/* ROOM STATUS
+Developed by: Muhammad Sharjeel */
 void showRoomStatus(struct Room rooms[])
 {
     int i;
@@ -467,7 +466,8 @@ void showRoomStatus(struct Room rooms[])
     printf("\n  Premium rooms: Rs %.2f per month    Normal rooms: Rs %.2f per month\n",
            PREMIUM_RENT, NORMAL_RENT);
 }
-// fee payment SHARJEEL
+/* FEE PAYMENT
+Developed by: Muhammad Sharjeel */
 void payFees(struct Student students[], int count)
 {
     int id = readNumber("\n  Enter student ID: ", 1, 9999);
@@ -497,7 +497,8 @@ void payFees(struct Student students[], int count)
         printf("  Payment received. Remaining: Rs %.2f\n", s->feeDue - s->feePaid);
     }
 }
-// fee defaulters SHARJEEL
+/* FEE DEFAULTERS
+Developed by: Muhammad Sharjeel */
 void showDefaulters(struct Student students[], int count)
 {
     int i, found = 0;
@@ -520,7 +521,8 @@ void showDefaulters(struct Student students[], int count)
         printf("\n  %d defaulter(s), total pending: Rs %.2f\n", found, totalPending);
     }
 }
-// file handling, loadData & saveData HARIS
+/* FILE HANDLING - LOAD & SAVE DATA
+Developed by: Haris Ismail */
 void loadData(struct Student students[], int *count, struct Room rooms[])
 {
     FILE *fp;
@@ -592,7 +594,8 @@ void saveData(struct Student students[], int count)
 }
 
 
-// activityLog HARIS
+/* ACTIVITY LOG
+Developed by: Haris Ismail */
 void logActivity(char action[], int id)
 {
     FILE *fp = fopen("activity.txt", "a");
@@ -608,7 +611,8 @@ void logActivity(char action[], int id)
 
 
 
-// report making HARIS
+/* TEXT REPORT MAKING
+Developed by: Haris Ismail */
 void exportReport(struct Student students[], int count, struct Room rooms[])
 {
     FILE *fp = fopen("hostel_report.txt", "w");
