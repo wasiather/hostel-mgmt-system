@@ -223,7 +223,6 @@ float readAmount(char prompt[], float min, float max)
 }
 /* ROOM INITIALIZATION
 Developed by: Yasir Ali Junejo */
-void initRooms(struct Room rooms[])
 char *roomTypeName(int type)
 {
     if (type == PREMIUM) 
